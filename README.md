@@ -27,6 +27,12 @@
 - The façade API listens on `http://localhost:8080`, Nakama gRPC on `127.0.0.1:7349`, and the Nakama console on `http://localhost:7351`.
 - Runtime modules are mounted from `src/infra/runtime`, so any changes there are picked up on the next Nakama restart.
 
+## Sand-ai Additions to Nakama
+- Domain-Driven Design scaffolding under `src/domain`, `src/app`, and `src/infra` wrapping Nakama APIs with Sand-ai aggregates and services.
+- REST façade in `cmd/api` (`/v1/...`) that fronts Nakama auth, groups, battles, leaderboards, and bot automation.
+- Custom runtime module at `src/infra/runtime/sandai_module.go` registering auth hooks, leaderboard validation, and an authoritative battle loop.
+- Deployment assets (`deploy/sandai/`) including the Nakama config, Docker Compose stack, Prometheus scrape config, and Kubernetes manifests.
+
 ## Features
 
 * **Users** - Register/login new users via social networks, email, or device ID.
