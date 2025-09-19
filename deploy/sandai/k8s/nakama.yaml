@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nakama
+  labels:
+    app: nakama
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nakama
+  template:
+    metadata:
+      labels:
+        app: nakama
+    spec:
+      containers:
+        - name: nakama
+          image: heroiclabs/nakama:3.21.0
+          args:
+            - "--name=nakama-node"
+            - "--database.address=cockroach:26257"
+            - "--logger.level=info"
+            - "--metrics.prometheus_port=9100"
+          ports:
+            - containerPort: 7349
+            - containerPort: 7350
+            - containerPort: 7351
+            - containerPort: 9100
+          env:
+            - name: NAKAMA_DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: sandai-database
+                  key: password
+          volumeMounts:
+            - name: runtime-modules
+              mountPath: /modules
+      volumes:
+        - name: runtime-modules
+          configMap:
+            name: sandai-runtime
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nakama
+  labels:
+    app: nakama
+spec:
+  type: ClusterIP
+  selector:
+    app: nakama
+  ports:
+    - name: grpc
+      port: 7349
+      targetPort: 7349
+    - name: console
+      port: 7351
+      targetPort: 7351
+    - name: metrics
+      port: 9100
+      targetPort: 9100
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: nakama
+spec:
+  minAvailable: 2
+  selector:
+    matchLabels:
+      app: nakama

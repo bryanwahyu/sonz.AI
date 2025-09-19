@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sandai-runtime
+  labels:
+    app: sandai
+binaryData:
+  sandai.so: ""

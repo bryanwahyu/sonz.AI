@@ -1,0 +1,68 @@
+name: sandai
+logger:
+  level: info
+  stdout: true
+session:
+  encryption_key: "0123456789abcdef0123456789abcdef"
+  refresh_encryption_key: "fedcba9876543210fedcba9876543210"
+  token_expiry_sec: 7200
+  refresh_token_expiry_sec: 604800
+socket:
+  server_key: sandai-server-key
+  port: 7350
+  max_message_size_bytes: 4096
+  max_request_size_bytes: 4096
+database:
+  addresses:
+    - root@cockroach:26257
+  conn_max_lifetime_ms: 600000
+  max_open_conns: 200
+  max_idle_conns: 50
+  ssl_mode: disable
+social:
+  steam:
+    publisher_key: "${STEAM_PUBLISHER_KEY}"
+    app_id: 0
+  facebook_instant_game:
+    app_secret: "${FACEBOOK_INSTANT_GAME_APP_SECRET}"
+  facebook_limited_login:
+    app_id: "${FACEBOOK_APP_ID}"
+  apple:
+    bundle_id: com.sandai.app
+runtime:
+  path: /modules
+  http_key: sandai-runtime-key
+  env:
+    - SANDAI_ENV=dev
+    - SANDAI_FEATURE_FLAGS=
+matchmaker:
+  max_tickets: 20000
+  interval_sec: 30
+leaderboard:
+  ranking_update_limit: 1000
+console:
+  username: admin
+  password: adminadmin
+  signing_key: sandai-console-signing
+party:
+  max_size: 8
+  max_bookmarks: 100
+  invitation_timeout_ms: 60000
+google_auth:
+  credentials_json: |-
+    {
+      "web": {
+        "client_id": "GOOGLE_CLIENT_ID",
+        "client_secret": "GOOGLE_CLIENT_SECRET",
+        "redirect_uris": [
+          "https://sandai.example.com/auth/google/callback"
+        ],
+        "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+        "token_uri": "https://oauth2.googleapis.com/token"
+      }
+    }
+iap:
+  apple:
+    shared_secret: "${APPLE_IAP_SHARED_SECRET}"
+mfa:
+  admin_account_enabled: false
