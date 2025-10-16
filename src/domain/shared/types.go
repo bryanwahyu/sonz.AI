@@ -12,6 +12,7 @@ type (
 	BattleID       string
 	SeasonID       string
 	BotCommandID   string
+	TournamentID   string
 	IdempotencyKey string
 )
 
@@ -47,6 +48,13 @@ func (id SeasonID) Validate() error {
 func (id BotCommandID) Validate() error {
 	if strings.TrimSpace(string(id)) == "" {
 		return errors.New("bot command id is required")
+	}
+	return nil
+}
+
+func (id TournamentID) Validate() error {
+	if strings.TrimSpace(string(id)) == "" {
+		return errors.New("tournament id is required")
 	}
 	return nil
 }
